@@ -1,3 +1,33 @@
+spring:
+  profiles: local
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/demo
+    username: root
+    password: password
+
+management:
+  endpoint:
+    info:
+      enabled: true
+
+---
+spring:
+  profiles: prod
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/demo
+    username: root
+    password: password
+
 management:
   endpoint:
     info:
