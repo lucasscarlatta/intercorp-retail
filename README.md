@@ -13,7 +13,7 @@ git clone https://github.com/lucasscarlatta/intercorp-retail.git
 ```sh
 cd intercorp-retail
 ```
-3. Run project
+3. Run project locally
 ```sh
-./gradlew run
+./gradlew run -Dspring.profiles.active=local
 ```
