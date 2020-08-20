@@ -28,15 +28,18 @@ public class Client {
     @ApiModelProperty(hidden = true)
     private Long id;
 
-    @NotNull
+    @NotBlank(message = "Name cannot be blank")
     @Column(name = "NAME")
     @ApiModelProperty(required = true, value = "Client name", example = "Lucas")
     private String name;
 
+    @NotBlank(message = "Last name cannot be blank")
     @Column(name = "LAST_NAME")
     @ApiModelProperty(required = true, example = "Scarlatta")
     private String lastName;
 
+    @NotNull(message = "Birthday cannot be null")
+    @Past(message = "Birthday should be in the past")
     @Column(name = "BIRTHDAY")
     @ApiModelProperty(required = true, example = "1992-10-16")
     private LocalDate birthday;
