@@ -1,8 +1,9 @@
 package com.example.demo.models;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,27 +26,29 @@ public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @ApiModelProperty(hidden = true)
+    @Schema(hidden = true)
     private Long id;
 
-    @NotBlank(message = "Name cannot be blank")
+    @NotBlank
+    @Length(max = 255, message = "must be less than or equal to 255 characters")
     @Column(name = "NAME")
-    @ApiModelProperty(required = true, value = "Client name", example = "Lucas")
+    @Schema(required = true, example = "Lucas")
     private String name;
 
-    @NotBlank(message = "Last name cannot be blank")
+    @NotBlank
+    @Length(max = 255, message = "must be less than or equal to 255 characters")
     @Column(name = "LAST_NAME")
-    @ApiModelProperty(required = true, example = "Scarlatta")
+    @Schema(required = true, example = "Scarlatta")
     private String lastName;
 
-    @NotNull(message = "Birthday cannot be null")
-    @Past(message = "Birthday should be in the past")
+    @NotNull
+    @Past
     @Column(name = "BIRTHDAY")
-    @ApiModelProperty(required = true, example = "1992-10-16")
+    @Schema(required = true, example = "1992-10-16")
     private LocalDate birthday;
 
     @Transient
-    @ApiModelProperty(hidden = true)
+    @Schema(hidden = true)
     private Integer age;
 
     public Integer getAge() {

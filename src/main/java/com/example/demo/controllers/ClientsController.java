@@ -1,9 +1,12 @@
 package com.example.demo.controllers;
 
+import com.example.demo.exception.error.ApiError;
 import com.example.demo.models.Client;
 import com.example.demo.services.ClientService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -28,6 +31,7 @@ public class ClientsController {
 
     @ApiOperation(value = "Create client")
     @ApiResponse(responseCode = "201", description = "New client created")
+    @ApiResponse(responseCode = "422", description = "Body validation errors", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
     @RequestMapping(method = POST, value = "")
     @ResponseStatus(value = CREATED)
     public ResponseEntity<Client> create(@Valid @RequestBody Client client) {
