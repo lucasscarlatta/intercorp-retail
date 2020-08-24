@@ -1,5 +1,7 @@
 package com.example.demo.config;
 
+import com.example.demo.exception.error.ApiError;
+import com.fasterxml.classmate.TypeResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -11,13 +13,15 @@ import springfox.documentation.spring.web.plugins.Docket;
 
 @Configuration
 @Profile("!prod")
-@ComponentScan("com.example.demo.controllers")
+@ComponentScan({"com.example.demo", "com.example.demo.exception.error"})
 public class SwaggerUiWebMvcConfigurer {
 
     @Bean
-    public Docket api() {
+    public Docket api(TypeResolver typeResolver) {
         return new Docket(DocumentationType.SWAGGER_2).useDefaultResponseMessages(false)
-                .select().paths(PathSelectors.any()).apis
-                (RequestHandlerSelectors.basePackage("com.example.demo.controllers")).build();
+                .select().apis(RequestHandlerSelectors.basePackage("com.example.demo"))
+                .paths(PathSelectors.any())
+                .build()
+                .additionalModels(typeResolver.resolve(ApiError.class));
     }
 }
