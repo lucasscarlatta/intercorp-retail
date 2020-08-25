@@ -23,7 +23,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@DisplayName("Client service test")
+@DisplayName("Client service unit test")
 @ExtendWith(MockitoExtension.class)
 class ClientServiceImplTest {
 
@@ -33,8 +33,7 @@ class ClientServiceImplTest {
     @InjectMocks
     private ClientServiceImpl service;
 
-    @DisplayName("Should pass when try to create a client with valid years test")
-    @ParameterizedTest(name = "For example, year {0} is not supported.")
+    @ParameterizedTest(name = "Should pass when try to create a client with valid age {0}.")
     @ValueSource(ints = { 10, 1 })
     void createValidYears(int year) {
         Client client = createClient(year);
@@ -47,6 +46,7 @@ class ClientServiceImplTest {
         verify(repository, times(1)).save(client);
     }
 
+    @DisplayName("Should throw an error when client list is empty")
     @Test
     void statisticErrorWhenClientsIsEmpty() {
         when(repository.findAll()).thenReturn(new ArrayList<>());
@@ -57,6 +57,7 @@ class ClientServiceImplTest {
         assertThat("Client list is empty").isEqualTo(exception.getMessage());
     }
 
+    @DisplayName("Should get a statistic when client list is not empty")
     @Test
     void getStatisticWhenClientsIsNotEmpty() {
         List<Client> clients = new ArrayList<>();

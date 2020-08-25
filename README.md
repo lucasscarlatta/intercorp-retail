@@ -20,11 +20,11 @@ cd intercorp-retail
 ```sh
 ./gradlew run -Dspring.profiles.active=local
 ```
-    1. Check application [startup](http://localhost:8080/actuator/health)
-    2. [Swagger](http://localhost:8080/swagger-ui/index.html)
+* Check application [startup](http://localhost:8080/actuator/health)
+* [Swagger](http://localhost:8080/swagger-ui/index.html)
 5. Run unit test
 ```sh
 ./gradlew test
 ```
-    1. [Test report](http://localhost:63342/demo/build/reports/tests/test/index.html)
-    2. [Coverage report](http://localhost:63342/demo/build/reports/jacoco/test/html/index.html)
+* [Test report](http://localhost:63342/demo/build/reports/tests/test/index.html)
+* [Coverage report](http://localhost:63342/demo/build/reports/jacoco/test/html/index.html)
