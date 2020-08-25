@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import com.example.demo.exception.error.ApiError;
 import com.example.demo.models.Client;
+import com.example.demo.models.Statistic;
 import com.example.demo.services.ClientService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
@@ -36,5 +39,13 @@ public class ClientsController {
     @ResponseStatus(value = CREATED)
     public ResponseEntity<Client> create(@Valid @RequestBody Client client) {
         return new ResponseEntity<>(service.create(client), CREATED);
+    }
+
+    @ApiOperation(value = "Get statistic from clients")
+    @ApiResponse(responseCode = "200", description = "Clients statistics")
+    @ApiResponse(responseCode = "204", description = "No clients found")
+    @RequestMapping(method = GET, value = "/kpid")
+    public ResponseEntity<Statistic> statistic() {
+        return new ResponseEntity<>(service.statistic(), OK);
     }
 }
