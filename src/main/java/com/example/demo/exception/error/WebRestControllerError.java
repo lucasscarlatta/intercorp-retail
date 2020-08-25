@@ -1,6 +1,6 @@
 package com.example.demo.exception.error;
 
-import com.example.demo.exception.UnprocessableEntityException;
+import com.example.demo.exception.NoContentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.PRECONDITION_FAILED;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
@@ -56,20 +57,6 @@ public class WebRestControllerError {
         return new ResponseEntity<>(apiError, NOT_ACCEPTABLE);
     }
 
-    @ExceptionHandler(UnprocessableEntityException.class)
-    @ResponseStatus(UNPROCESSABLE_ENTITY)
-    public ResponseEntity<ApiError> handleUnprocessableEntityException(UnprocessableEntityException ex,
-                                                                       WebRequest request) {
-        LOGGER.error("> handleUnprocessableEntityException");
-        LOGGER.error("- Exception: ", ex);
-
-        ApiError apiError = createApiError(UNPROCESSABLE_ENTITY, ex.getMessage(), ex, request);
-
-        LOGGER.error("< handleUnprocessableEntityException");
-
-        return new ResponseEntity<>(apiError, UNPROCESSABLE_ENTITY);
-    }
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(PRECONDITION_FAILED)
     public ResponseEntity<ApiError> handleArgumentNotValidException(MethodArgumentNotValidException ex,
@@ -82,6 +69,14 @@ public class WebRestControllerError {
         LOGGER.error("< handleArgumentNotValidException");
 
         return new ResponseEntity<>(apiError, PRECONDITION_FAILED);
+    }
+
+    @ExceptionHandler(NoContentException.class)
+    @ResponseStatus(NO_CONTENT)
+    public ResponseEntity<ApiError> handleNoContentException(NoContentException ex) {
+        LOGGER.info("- Message: {}", ex.getMessage());
+
+        return new ResponseEntity<>(NO_CONTENT);
     }
 
     private ApiError createApiError(HttpStatus status, String message, Exception ex, WebRequest request) {

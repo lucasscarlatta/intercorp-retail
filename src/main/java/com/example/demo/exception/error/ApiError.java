@@ -15,25 +15,25 @@ import java.util.List;
 @AllArgsConstructor
 public class ApiError {
 
-    @Schema(name = "Http status", example = "status")
+    @Schema(description = "Http status", example = "status")
     private HttpStatus status;
 
-    @Schema(name = "Http status code")
+    @Schema(description = "Http status code")
     private int code;
 
-    @Schema(name = "Server local date")
+    @Schema(description = "Server local date")
     private LocalDateTime timestamp;
 
-    @Schema(name = "Error message")
+    @Schema(description = "Error message")
     private String message;
 
-    @Schema(name = "Error debug message")
+    @Schema(description = "Error debug message")
     @JsonIgnore
     private String debugMessage;
 
-    @Schema(name = "Error endpoint path")
+    @Schema(description = "Error endpoint path")
     private String path;
 
-    @Schema(name = "List of validation errors")
+    @Schema(description = "List of validation errors")
     private List<String> errors;
 }
