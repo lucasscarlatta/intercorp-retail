@@ -57,9 +57,9 @@ spring:
       ddl-auto: update
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://docker-mysql:3306/demo
-    username: root
-    password: password
+    url: jdbc:mysql://docker-mysql:3306/${MYSQL_DATABASE}
+    username: "${MYSQL_USER}"
+    password: "${MYSQL_PASSWORD}"
 
 management:
   endpoint:

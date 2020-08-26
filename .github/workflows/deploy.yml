@@ -92,8 +92,9 @@ jobs:
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
             echo "Pull image"
             docker pull docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME:${{ needs.push.outputs.version_name }}
-            echo "Run Docker mysql"
-            docker run -d -p 3306:3306 --name=docker-mysql --restart=always -e MYSQL_ROOT_PASSWORD -e MYSQL_DATABASE mysql:5.7
             echo "Run Docker demo"
             docker run -d -p 8080:8080 --restart=unless-stopped --link="docker-mysql" \
+            -e MYSQL_PASSWORD \
+            -e MYSQL_DATABASE \
+            -e MYSQL_USER \
             --name demo-app docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME:${{ needs.push.outputs.version_name }}
