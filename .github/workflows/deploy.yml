@@ -22,7 +22,7 @@ jobs:
       - name: Run test
         run: ./gradlew cleanTest test
 
-  build:
+  push:
     needs: test
 
     runs-on: ubuntu-latest
