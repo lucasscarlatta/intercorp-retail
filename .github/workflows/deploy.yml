@@ -93,7 +93,7 @@ jobs:
             echo "Pull image"
             docker pull docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME:${{ needs.push.outputs.version_name }}
             echo "Run Docker demo"
-            docker run -d -p 8080:8080 --restart=unless-stopped --link="docker-mysql" \
+            docker run -d -p 80:8080 --restart=unless-stopped --link="docker-mysql" \
             -e MYSQL_PASSWORD \
             -e MYSQL_DATABASE \
             -e MYSQL_USER \
