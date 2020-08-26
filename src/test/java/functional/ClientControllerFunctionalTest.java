@@ -18,10 +18,14 @@ import org.springframework.test.context.ActiveProfiles;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.example.demo.services.impl.ClientServiceImpl.EVEN_OLD;
+import static com.example.demo.services.impl.ClientServiceImpl.OLD;
+import static com.example.demo.services.impl.ClientServiceImpl.YOUNG;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
@@ -59,7 +63,7 @@ public class ClientControllerFunctionalTest {
 
     @DisplayName("Should return 201 status code when create a client whit valid data")
     @Test
-    public void shouldReturn201CodeWhenCreateClient() {
+    public void shouldReturn201CodeWhenCreateYoungClient() {
         String name = "Lucas";
         String lastName = "Scarlatta";
         int age = 21;
@@ -73,6 +77,52 @@ public class ClientControllerFunctionalTest {
         assertThat(response.getBody().getName()).isEqualTo(name);
         assertThat(response.getBody().getLastName()).isEqualTo(lastName);
         assertThat(response.getBody().getAge()).isEqualTo(age);
+        int year = Period.between(client.getBirthday(), response.getBody().getDateOfDeath()).getYears();
+        assertThat(year).isBetween(YOUNG, OLD);
+        assertThat(year).isGreaterThanOrEqualTo(age);
+        assertThat(year).isGreaterThanOrEqualTo(YOUNG);
+    }
+
+    @DisplayName("Should return 201 status code when create a old client")
+    @Test
+    public void shouldReturn201CodeWhenCreateOldClient() {
+        String name = "Lucas";
+        String lastName = "Scarlatta";
+        int age = 99;
+        Client client = createClient(name, lastName, age);
+
+        ResponseEntity<Client> response = this.restTemplate
+                .postForEntity(baseURL + port + CLIENTS, client, Client.class);
+
+        assertThat(response.getStatusCode()).isEqualByComparingTo(CREATED);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getName()).isEqualTo(name);
+        assertThat(response.getBody().getLastName()).isEqualTo(lastName);
+        assertThat(response.getBody().getAge()).isEqualTo(age);
+        int year = Period.between(client.getBirthday(), response.getBody().getDateOfDeath()).getYears();
+        assertThat(year).isGreaterThanOrEqualTo(age);
+        assertThat(year).isGreaterThanOrEqualTo(OLD);
+    }
+
+    @DisplayName("Should return 201 status code when create a old client")
+    @Test
+    public void shouldReturn201CodeWhenCreateClient() {
+        String name = "Lucas";
+        String lastName = "Scarlatta";
+        int age = 77;
+        Client client = createClient(name, lastName, age);
+
+        ResponseEntity<Client> response = this.restTemplate
+                .postForEntity(baseURL + port + CLIENTS, client, Client.class);
+
+        assertThat(response.getStatusCode()).isEqualByComparingTo(CREATED);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getName()).isEqualTo(name);
+        assertThat(response.getBody().getLastName()).isEqualTo(lastName);
+        assertThat(response.getBody().getAge()).isEqualTo(age);
+        int year = Period.between(client.getBirthday(), response.getBody().getDateOfDeath()).getYears();
+        assertThat(year).isGreaterThanOrEqualTo(age);
+        assertThat(year).isLessThanOrEqualTo(EVEN_OLD);
     }
 
     @DisplayName("Should return 412 status code when client name and last name are empty")
@@ -136,6 +186,32 @@ public class ClientControllerFunctionalTest {
         assertThat(response.getBody().getErrors().get(0)).isEqualTo("birthday: must be a past date");
     }
 
+    @DisplayName("Should return 204 status code when call clients and client list is empty")
+    @Test
+    public void shouldReturn204CodeWhenCallClientsAndClientsListIsEmpty() {
+        ResponseEntity<Client[]> response = this.restTemplate
+                .getForEntity(baseURL + port + CLIENTS, Client[].class);
+        assertThat(response.getStatusCode()).isEqualByComparingTo(NO_CONTENT);
+        assertThat(response.getBody()).isNull();
+    }
+
+    @DisplayName("Should return 200 status code when call statistic and client list is not empty")
+    @Test
+    public void shouldReturn200CodeWhenCallClientsAndClientsListExist() {
+        List<Client> clients = new ArrayList<>(Arrays.asList(
+                createClient("Lucas", "Scarlatta", 21),
+                createClient("Carla", "Lujan", 9),
+                createClient("Juan", "Perez", 33)));
+
+        clientRepository.saveAll(clients);
+
+        ResponseEntity<Client[]> response = this.restTemplate
+                .getForEntity(baseURL + port + CLIENTS, Client[].class);
+        assertThat(response.getStatusCode()).isEqualByComparingTo(OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().length).isEqualTo(clients.size());
+    }
+
     @DisplayName("Should return 204 status code when call statistic and client list is empty")
     @Test
     public void shouldReturn204CodeWhenClientsListIsEmpty() {
@@ -157,7 +233,6 @@ public class ClientControllerFunctionalTest {
 
         ResponseEntity<Statistic> response = this.restTemplate
                 .getForEntity(baseURL + port + CLIENTS + KPID, Statistic.class);
-        System.out.println(response.getBody());
         assertThat(response.getStatusCode()).isEqualByComparingTo(OK);
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getAverageAge()).isEqualTo(21);

@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
+import java.util.Collections;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -149,6 +150,45 @@ public class ClientControllerWebIntegrationTest {
         verify(service, never()).create(any(Client.class));
     }
 
+    @DisplayName("Should expect an error when client birthday is malformed date")
+    @Test
+    public void createClientBirthdayMalformed() throws Exception {
+        String name = "Lucas";
+        String lastName = "Scarlatta";
+        String stringDate = "stringDate";
+
+        Client client = new Client();
+        client.setName(name);
+
+        given(service.create(any(Client.class))).willReturn(client);
+
+        String content = String.format("{\"name\":\"%s\",\"lastName\":\"%s\",\"birthday\":\"%s\"}",
+                name, lastName, stringDate);
+
+        performPostClient(content)
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.path").value(CLIENTS))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Malformed JSON request"))
+                .andReturn();
+
+        verify(service, never()).create(any(Client.class));
+    }
+
+    @DisplayName("Should get success when call clients")
+    @Test
+    public void getClients() throws Exception {
+        Client client = new Client();
+        client.setName("Lucas");
+        client.setLastName("Scarlatta");
+        client.setBirthday(LocalDate.now().minusYears(10));
+
+        given(service.clients()).willReturn(Collections.singletonList(client));
+
+        performGetClients().andExpect(status().isOk());
+
+        verify(service, times(1)).clients();
+    }
+
     @DisplayName("Should get success when call statistics")
     @Test
     public void getStatistics() throws Exception {
@@ -158,7 +198,7 @@ public class ClientControllerWebIntegrationTest {
 
         given(service.statistic()).willReturn(statistic);
 
-        performGetClients().andExpect(status().isOk());
+        performGetClientsKPID().andExpect(status().isOk());
 
         verify(service, times(1)).statistic();
     }
@@ -170,6 +210,11 @@ public class ClientControllerWebIntegrationTest {
     }
 
     private ResultActions performGetClients() throws Exception {
+        return mockMvc.perform(get(CLIENTS)
+                .contentType(APPLICATION_JSON));
+    }
+
+    private ResultActions performGetClientsKPID() throws Exception {
         return mockMvc.perform(get(CLIENTS + KPID)
                 .contentType(APPLICATION_JSON));
     }

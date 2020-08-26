@@ -48,6 +48,35 @@ class ClientServiceImplTest {
 
     @DisplayName("Should throw an error when client list is empty")
     @Test
+    void clientsErrorWhenClientsIsEmpty() {
+        when(repository.findAll()).thenReturn(new ArrayList<>());
+
+        Exception exception = assertThrows(NoContentException.class, () ->
+                service.clients());
+
+        assertThat("Client list is empty").isEqualTo(exception.getMessage());
+    }
+
+    @DisplayName("Should get clients when client list is not empty")
+    @Test
+    void getClientsWhenClientsIsNotEmpty() {
+        List<Client> clients = new ArrayList<>();
+        Client client = createClient(10);
+        clients.add(client);
+        client = createClient(20);
+        clients.add(client);
+        client = createClient(30);
+        clients.add(client);
+
+        when(repository.findAll()).thenReturn(clients);
+
+        List<Client> result = service.clients();
+
+        assertThat(result.size()).isEqualTo(clients.size());
+    }
+
+    @DisplayName("Should throw an error when client list is empty")
+    @Test
     void statisticErrorWhenClientsIsEmpty() {
         when(repository.findAll()).thenReturn(new ArrayList<>());
 

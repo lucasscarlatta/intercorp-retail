@@ -47,6 +47,9 @@ public class Client {
     @Schema(required = true, example = "1992-10-16")
     private LocalDate birthday;
 
+    @Schema(hidden = true)
+    private LocalDate dateOfDeath;
+
     @Transient
     @Schema(hidden = true)
     private Integer age;
