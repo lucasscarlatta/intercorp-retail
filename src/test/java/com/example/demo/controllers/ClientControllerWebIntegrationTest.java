@@ -3,6 +3,7 @@ package com.example.demo.controllers;
 import com.example.demo.models.Client;
 import com.example.demo.models.Statistic;
 import com.example.demo.services.impl.ClientServiceImpl;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(ClientsController.class)
+@DisplayName("Client controller uni test")
 public class ClientControllerWebIntegrationTest {
 
     private static final String CLIENTS = "/clients";
@@ -38,6 +40,7 @@ public class ClientControllerWebIntegrationTest {
     @MockBean
     private ClientServiceImpl service;
 
+    @DisplayName("Should create a client when send correct data")
     @Test
     public void createClient() throws Exception {
         String name = "Lucas";
@@ -65,6 +68,7 @@ public class ClientControllerWebIntegrationTest {
         verify(service, times(1)).create(any(Client.class));
     }
 
+    @DisplayName("Should expect an error when client name is empty")
     @Test
     public void createClientEmptyName() throws Exception {
         String name = "";
@@ -92,6 +96,7 @@ public class ClientControllerWebIntegrationTest {
         verify(service, never()).create(any(Client.class));
     }
 
+    @DisplayName("Should expect an error when client last name is null")
     @Test
     public void createClientNullLastName() throws Exception {
         String name = "Lucas";
@@ -117,6 +122,7 @@ public class ClientControllerWebIntegrationTest {
         verify(service, never()).create(any(Client.class));
     }
 
+    @DisplayName("Should expect an error when client birthday is after today")
     @Test
     public void createClientBirthdayAfterToday() throws Exception {
         String name = "Lucas";
@@ -143,6 +149,7 @@ public class ClientControllerWebIntegrationTest {
         verify(service, never()).create(any(Client.class));
     }
 
+    @DisplayName("Should get success when call statistics")
     @Test
     public void getStatistics() throws Exception {
         Statistic statistic = new Statistic();

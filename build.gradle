@@ -77,4 +77,7 @@ test {
     jacoco {
         excludes += ["**/com.example.demo.config/**"]
     }
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }

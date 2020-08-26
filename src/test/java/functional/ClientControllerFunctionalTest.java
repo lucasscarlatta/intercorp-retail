@@ -6,6 +6,7 @@ import com.example.demo.models.Client;
 import com.example.demo.models.Statistic;
 import com.example.demo.repositories.ClientRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,6 +30,7 @@ import static org.springframework.http.HttpStatus.PRECONDITION_FAILED;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = DemoApplication.class)
 @ActiveProfiles("test")
+@DisplayName("Client controller functional test")
 public class ClientControllerFunctionalTest {
 
     private final String baseURL;
@@ -55,6 +57,7 @@ public class ClientControllerFunctionalTest {
         clientRepository.deleteAll();
     }
 
+    @DisplayName("Should return 201 status code when create a client whit valid data")
     @Test
     public void shouldReturn201CodeWhenCreateClient() {
         String name = "Lucas";
@@ -72,6 +75,7 @@ public class ClientControllerFunctionalTest {
         assertThat(response.getBody().getAge()).isEqualTo(age);
     }
 
+    @DisplayName("Should return 412 status code when client name and last name are empty")
     @Test
     public void shouldReturn412CodeWhenClientNameAndLastNameAreEmpty() {
         String name = "";
@@ -93,6 +97,7 @@ public class ClientControllerFunctionalTest {
         assertThat(body.getErrors().stream().filter(e -> e.equals("lastName: must not be blank")).count()).isEqualTo(1);
     }
 
+    @DisplayName("Should return 412 status code when client name and last name are null")
     @Test
     public void shouldReturn412CodeWhenClientNameAndLastNameAreNull() {
         int age = 21;
@@ -112,6 +117,7 @@ public class ClientControllerFunctionalTest {
         assertThat(body.getErrors().stream().filter(e -> e.equals("lastName: must not be blank")).count()).isEqualTo(1);
     }
 
+    @DisplayName("Should return 412 status code when client birthday is in the feature")
     @Test
     public void shouldReturn412CodeWhenClientBirthdayIsInTheFuture() {
         String name = "Lucas";
@@ -130,6 +136,7 @@ public class ClientControllerFunctionalTest {
         assertThat(response.getBody().getErrors().get(0)).isEqualTo("birthday: must be a past date");
     }
 
+    @DisplayName("Should return 204 status code when call statistic and client list is empty")
     @Test
     public void shouldReturn204CodeWhenClientsListIsEmpty() {
         ResponseEntity<Statistic> response = this.restTemplate
@@ -138,6 +145,7 @@ public class ClientControllerFunctionalTest {
         assertThat(response.getBody()).isNull();
    }
 
+    @DisplayName("Should return 200 status code when call statistic and client list is not empty")
     @Test
     public void shouldReturn200CodeWhenClientsListExist() {
         List<Client> clients = new ArrayList<>(Arrays.asList(
