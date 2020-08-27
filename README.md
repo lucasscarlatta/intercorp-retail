@@ -12,16 +12,35 @@ git clone https://github.com/lucasscarlatta/intercorp-retail.git
 ```sh
 cd intercorp-retail
 ```
+3. Start local database
+```sh
+docker run -d -p 3306:3306 --name=docker-mysql --restart=always -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=demo mysql:5.7
+```
 3. Build project locally
 ```sh
 ./gradlew build
 ```
 4. Run project locally
-```sh
-./gradlew run -Dspring.profiles.active=local
-```
+    1. With gradle
+    ```sh
+    ./gradlew run -Dspring.profiles.active=local
+    ```
+    2. With docker
+        1. Build docker Image (This use prod profile)
+        ```sh
+        docker build -f Dockerfile -t demo-app .
+        ```
+        2. Run docker image
+        ```sh
+        docker run -d -p 8080:8080 --restart=unless-stopped --link="docker-mysql" \
+        -e MYSQL_ROOT_PASSWORD=password \
+        -e MYSQL_DATABASE=demo \
+        --name demo-app demo-app
+        ```
+
 * Check application [startup](http://localhost:8080/actuator/health)
 * [Swagger](http://localhost:8080/swagger-ui/index.html)
+
 5. Run unit test
 ```sh
 ./gradlew test
