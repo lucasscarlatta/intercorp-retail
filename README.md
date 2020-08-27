@@ -28,3 +28,9 @@ cd intercorp-retail
 ```
 * [Test report](http://localhost:63342/demo/build/reports/tests/test/index.html)
 * [Coverage report](http://localhost:63342/demo/build/reports/jacoco/test/html/index.html)
+
+### Deploy
+Push to deploy run git action and deploy in digital ocean droplet.
+
+Prod Check application [startup](http://68.183.124.83:8080/actuator/health)
+[Prod Swagger](http://68.183.124.83:8080/swagger-ui/index.html)
