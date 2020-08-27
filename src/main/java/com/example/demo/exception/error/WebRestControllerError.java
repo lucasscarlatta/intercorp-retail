@@ -1,6 +1,7 @@
 package com.example.demo.exception.error;
 
 import com.example.demo.exception.NoContentException;
+import com.example.demo.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.PRECONDITION_FAILED;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
@@ -46,7 +48,6 @@ public class WebRestControllerError {
     @ResponseStatus(NOT_ACCEPTABLE)
     protected ResponseEntity<ApiError> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                     WebRequest request) {
-
         LOGGER.error("> handleMethodArgumentNotValid");
         LOGGER.error("- Exception: ", ex);
 
@@ -55,6 +56,19 @@ public class WebRestControllerError {
         LOGGER.error("< handleMethodArgumentNotValid");
 
         return new ResponseEntity<>(apiError, NOT_ACCEPTABLE);
+    }
+
+    @ExceptionHandler({NotFoundException.class})
+    @ResponseStatus(NOT_FOUND)
+    protected ResponseEntity<ApiError> handleNotFound(NotFoundException ex, WebRequest request) {
+        LOGGER.error("> handleNotFound");
+        LOGGER.error("- Exception: ", ex);
+
+        ApiError apiError = createApiError(NOT_FOUND, ex.getMessage(), ex, request);
+
+        LOGGER.error("< handleNotFound");
+
+        return new ResponseEntity<>(apiError, NOT_FOUND);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
