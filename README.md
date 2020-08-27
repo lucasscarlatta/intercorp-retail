@@ -30,7 +30,7 @@ cd intercorp-retail
 * [Coverage report](http://localhost:63342/demo/build/reports/jacoco/test/html/index.html)
 
 ### Deploy
-Push to deploy run git action and deploy in digital ocean droplet.
+Push to develop branch run git action and deploy in digital ocean droplet.
 
-Prod Check application [startup](http://68.183.124.83:8080/actuator/health)
-[Prod Swagger](http://68.183.124.83:8080/swagger-ui/index.html)
+* Check application [startup](http://68.183.124.83/actuator/health) prod
+* [Swagger prod](http://68.183.124.83/swagger-ui/index.htmll)

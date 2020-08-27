@@ -96,4 +96,5 @@ jobs:
             docker run -d -p 80:8080 --restart=unless-stopped --link="docker-mysql" \
             -e MYSQL_PASSWORD \
             -e MYSQL_DATABASE \
+            -e MYSQL_USER \
             --name demo-app docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME:${{ needs.push.outputs.version_name }}

@@ -58,7 +58,7 @@ spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://docker-mysql:3306/${MYSQL_DATABASE}
-    username: root
+    username: ${MYSQL_USER}
     password: ${MYSQL_PASSWORD}
 
 management:
