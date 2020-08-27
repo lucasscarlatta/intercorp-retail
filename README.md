@@ -52,4 +52,4 @@ docker run -d -p 3306:3306 --name=docker-mysql --restart=always -e MYSQL_ROOT_PA
 Push to develop branch run git action and deploy in digital ocean droplet.
 
 * Check application [startup](http://68.183.124.83/actuator/health) prod
-* [Swagger prod](http://68.183.124.83/swagger-ui/index.htmll)
+* [Swagger prod](http://68.183.124.83/swagger-ui/index.html)
