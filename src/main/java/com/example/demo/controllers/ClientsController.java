@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+import java.util.List;
+
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -39,6 +41,14 @@ public class ClientsController {
     @ResponseStatus(value = CREATED)
     public ResponseEntity<Client> create(@Valid @RequestBody Client client) {
         return new ResponseEntity<>(service.create(client), CREATED);
+    }
+
+    @ApiOperation(value = "Get clients")
+    @ApiResponse(responseCode = "200", description = "Clients information")
+    @ApiResponse(responseCode = "204", description = "No clients found")
+    @RequestMapping(method = GET)
+    public ResponseEntity<List<Client>> clients() {
+        return new ResponseEntity<>(service.clients(), OK);
     }
 
     @ApiOperation(value = "Get statistic from clients")
